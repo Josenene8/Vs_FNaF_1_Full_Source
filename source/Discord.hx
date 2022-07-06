@@ -1,8 +1,8 @@
 package;
-
+#if desktop
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
-
+#end
 #if LUA_ALLOWED
 import llua.Lua;
 import llua.State;
@@ -13,10 +13,10 @@ using StringTools;
 class DiscordClient
 {
 	public function new()
-	{
+	{       #if desktop
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "951904800985972786",
+			clientID: "863222024192262205",
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
@@ -31,22 +31,24 @@ class DiscordClient
 		}
 
 		DiscordRpc.shutdown();
+	        #end
 	}
 	
 	public static function shutdown()
-	{
+	{       #if desktop
 		DiscordRpc.shutdown();
+	        #end
 	}
 	
 	static function onReady()
-	{
+	{       #if desktop
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
 			largeImageKey: 'icon',
 			largeImageText: "Psych Engine"
 		});
-	}
+	}       #end
 
 	static function onError(_code:Int, _message:String)
 	{
@@ -68,7 +70,7 @@ class DiscordClient
 	}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey : String, ?hasStartTimestamp : Bool, ?endTimestamp: Float)
-	{
+	{       #if desktop
 		var startTimestamp:Float = if(hasStartTimestamp) Date.now().getTime() else 0;
 
 		if (endTimestamp > 0)
@@ -95,6 +97,6 @@ class DiscordClient
 		Lua_helper.add_callback(lua, "changePresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
 			changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp);
 		});
-	}
+	}       #end
 	#end
 }
