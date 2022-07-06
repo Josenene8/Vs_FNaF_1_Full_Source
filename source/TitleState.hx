@@ -77,7 +77,11 @@ class TitleState extends MusicBeatState
 	public static var updateVersion:String = '';
 
 	override public function create():Void
-	{
+	{ 
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end  
+			
 		#if MODS_ALLOWED
 		// Just to load a mod on start up if ya got one. For mods that change the menu music and bg
 		if (FileSystem.exists("modsList.txt")){
